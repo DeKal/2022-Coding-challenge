@@ -1,4 +1,4 @@
-import fetchAPI from "./api.js";
+
 
 const WIDTH = 1200;
 const HEIGHT = 800;
@@ -8,7 +8,21 @@ const LINE_Y = 60;
 const UNIT_WIDTH = WIDTH / LINE_X;
 const UNIT_HEIGHT = HEIGHT / LINE_Y;
 
+const url = "http://127.0.0.1:5501";
+
+const fetchAPI = async () => {
+	try {
+		console.log("fetch ongoing");
+		const response = await fetch(url);
+		console.log("fetch done: ", response.data);
+		return response.data;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 let data1 = await fetchAPI();
+console.log(data1)
 
 const data = [
 	{

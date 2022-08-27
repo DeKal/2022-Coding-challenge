@@ -11,6 +11,14 @@ services:
       interval: 10s
       timeout: 2s
       retries: 3
+  api:
+    build: ./app/consumer
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app/consumer:/api
+    depends_on:
+        - "dispatching_queue"
   nginx:
     image: nginx:latest
     container_name: "nginx"
