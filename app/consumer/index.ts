@@ -1,5 +1,6 @@
 import amqplib, { Channel, Connection } from 'amqplib'
 import express, { Request, Response } from 'express'
+import cors from 'cors'
 
 const app = express()
 
@@ -9,7 +10,8 @@ const PORT = 9000
 
 let channel: Channel, connection: Connection
 
-connect()
+// Comment this b/c this cannot be run without axon internet
+// connect()
 
 async function connect() {
   try {
@@ -123,14 +125,43 @@ const getStates = (request: Request, response: Response) => {
       } 
     })
   })
-
+  // using states in real env
   let states: ApiResponse = {
     data: {
       incidents: incidents, 
       officers: officers,
     },
   };
-  response.status(200).json(states);
+  
+  response.status(200).json(
+    {
+      data: {
+        incidents: [
+          {
+            id: 1,
+            codeName: "Incident A",
+            loc: { x: 18, y: 28 },
+            officerId: 2,
+          },
+          {
+            id: 2,
+            codeName: "Incident B",
+            loc: { x: 38, y: 5 },
+            officerId: 1,
+          },
+        ],
+        officers: [
+          { id: 1, badgeName: "Minh 1", loc: { x: 50, y: 35 } },
+          { id: 2, badgeName: "Minh 2", loc: { x: 10, y: 20 } },
+        ],
+      },
+      error: null,
+    }
+  );
 };
+
+app.use(cors({
+  origin: '*'
+}));
 
 app.get('/api/v1/state', getStates);

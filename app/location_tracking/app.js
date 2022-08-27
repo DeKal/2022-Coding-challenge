@@ -8,47 +8,19 @@ const LINE_Y = 60;
 const UNIT_WIDTH = WIDTH / LINE_X;
 const UNIT_HEIGHT = HEIGHT / LINE_Y;
 
-const url = "http://127.0.0.1:5501";
+const url = "http://localhost:9000/api/v1/state";
 
 const fetchAPI = async () => {
 	try {
 		console.log("fetch ongoing");
 		const response = await fetch(url);
-		console.log("fetch done: ", response.data);
-		return response.data;
+		return await response.json();
 	} catch (err) {
 		console.log(err);
 	}
 };
 
-let data1 = await fetchAPI();
-console.log(data1)
 
-const data = [
-	{
-		data: {
-			incidents: [
-				{
-					id: 1,
-					codeName: "Incident A",
-					loc: { x: 18, y: 28 },
-					officerId: 2,
-				},
-				{
-					id: 2,
-					codeName: "Incident B",
-					loc: { x: 38, y: 5 },
-					officerId: 1,
-				},
-			],
-			officers: [
-				{ id: 1, badgeName: "Minh 1", loc: { x: 50, y: 35 } },
-				{ id: 2, badgeName: "Minh 2", loc: { x: 10, y: 20 } },
-			],
-		},
-		error: null,
-	},
-];
 
 const TOOLTIP_STYLE = new PIXI.TextStyle({
 	fill: "white",
@@ -182,20 +154,9 @@ async function loop() {
 	}
 }
 
-const Incidents = data[0].data["incidents"];
-
-const Officers = data[0].data["officers"];
-
-const Error = data[0].error;
 
 async function loadData() {
-	return {
-		data: {
-			incidents: Incidents,
-			officers: Officers,
-		},
-		error: Error || null,
-	};
+	return await fetchAPI();
 }
 
 start();
